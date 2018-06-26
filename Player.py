@@ -20,3 +20,27 @@ class FirstPlayer(Player):
     def turn(self, dice_roll):
         pass
         #self.figures_get_furthest().move(dice_roll)
+
+
+class LastPlayer(Player):
+    """
+    This player always moves the figure in the back
+    """
+
+    def __init__(self):
+        super.__init__()
+
+    def turn(self, dice_roll):
+        pass
+
+
+class RandomPlayer(Player):
+    """
+    This player selects a figure to move randomly
+    """
+
+    def __init__(self):
+        super.__init__()
+
+    def turn(self, dice_roll):
+        pass
