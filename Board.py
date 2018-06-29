@@ -40,6 +40,16 @@ class Board:
         """
         return self.board[self.get_start_position(player_id)]
 
+    def get_target_position(self, player_id):
+        """return target position for the given player id. The target position
+        is the field directly in front of a players target."""
+        return self.target_fields[player_id]
+
+    def get_field_content(self, position):
+        """get content of the board at position"""
+        if position >= 0 and position <= 39:
+            return self.board[position]
+
     def throw(self, token):
         if self.board[token.pos] != token:
             raise InvalidMoveException("Trying to throw token that is not on the board")
