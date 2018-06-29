@@ -45,6 +45,24 @@ class Board:
         is the field directly in front of a players target."""
         return self.target_fields[player_id]
 
+    def get_home_tokens(self, player_id):
+        """return list of tokens that are in a players home. List is empty if
+        there are no tokens in the players home"""
+        return [t for t in self.tokens[player_id] if t.pos == 'h']
+
+    def player_tokens(self, player_id):
+        """return a list of all tokens of a player"""
+        return self.tokens[player_id]
+
+    def get_player_tokens_on_board(self, player_id):
+        """Return a list of all tokens that are currently on the board, meaning
+        no home tokens are included."""
+        return [t for t in self.tokens if t.pos != 'h']
+
+    def home_token_number(self, player_id):
+        """get number of tokes that are in the players home"""
+        return len(self.get_home_tokens(player_id))
+
     def get_field_content(self, position):
         """get content of the board at position"""
         if position >= 0 and position <= 39:
