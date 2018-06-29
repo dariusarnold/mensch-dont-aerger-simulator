@@ -26,8 +26,7 @@ class Game:
         """
         self.players = [self.create_player(p, i) for i, p in enumerate((p1, p2, p3, p4)) if p is not None]
         self.game_running = True
-        self.p1, self.p2, self.p3, self.p4 = [p for p in self.players]
-
+        self.p1, self.p2, self.p3, self.p4 = self.players
 
         mprint("Starting game with {} players.".format(len(self.players)))
         for player in self.players:
