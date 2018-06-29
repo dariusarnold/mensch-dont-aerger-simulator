@@ -21,6 +21,12 @@ class Board:
             t = p.Token('h', p.id)
             self.homes[p.id] = [t]*4           # place 4 tokens into player home at start
             self.tokens[p.id] = t
+class InvalidMoveException(Exception):
+    """
+    Raised when the attempted move is invalid and wont be performed.
+    """
+    pass
+
 class Token:
     """
     Token with a player id to which it belongs. Position marks the position on
