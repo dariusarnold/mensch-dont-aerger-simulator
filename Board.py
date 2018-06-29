@@ -73,6 +73,46 @@ class Board:
             raise InvalidMoveException("Trying to throw token that is not on the board")
         self.board[token.pos] = None
         token.pos = 'h'
+
+    def move_token(self, token, places=None):
+        """
+        Move given token by places
+        :param token: Which token to move_token
+        :type token: Token
+        :param places: how many spaces to move_token token. Not required for token in
+        home.
+        :type places: int
+        :rtype: None
+        """
+        id = token.id # token id is equal to id of the player to which the token belongs
+        if token.pos == 'h':
+            # is the players start field free?
+            start_content = self.get_start_content(id)
+            if start_content is None:
+                # start is empty
+                self._move(token, self.start_fields[token.id])
+            elif start_content.id is id:
+                # own token blocking start
+                raise InvalidMoveException("Start field blocked by own token")
+            else:
+                # other players token blocks start, throw him
+                start_content.pos = 'h'
+                self._move(token, self.start_fields[token.id])
+        elif token.pos < 0:
+            # token is in target
+            raise NotImplementedError
+        elif token.pos >= 0:
+            # token is on normal board
+            new_pos = (token.pos + places) % 39
+            target_content = self.get_field_content(new_pos)
+            if target_content is not None:
+                # kick other players token
+                # Todo: kick function or add it to _move
+                target_content.pos = 'h'
+                self._move(token, new_pos)
+            else:
+                # target field is free, move there
+                self._move(token, new_pos)
     def _move(self, token, new_pos):
         """
         Change token pos attribute and update board
