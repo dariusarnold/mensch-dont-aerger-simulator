@@ -20,6 +20,19 @@ class Board:
                 t = Token('h', p.id)
                 self.tokens[p.id].append(t)
 
+    def move_out_of_home(self, player_id):
+        """
+        Get a token from players home and move it to the start position if free. If start position is blocked by
+        another players token, beat that token. If start position is blocked by own token, raise InvalidMoveException.
+        :param player_id: Which players token to move
+        :type player_id: int
+        :raises InvalidMoveException: When the players start field is blocked by one of his own tokens
+        """
+        t = self.get_home_tokens(player_id)
+        if not t:
+            raise InvalidMoveException("Cant move token from empty home")
+        self.move_token(t[0])
+
     def get_start_position(self, player_id):
         """
         Return start position for the given player id. The start position is
