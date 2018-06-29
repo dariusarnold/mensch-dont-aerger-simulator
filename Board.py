@@ -1,4 +1,8 @@
-
+"""
+Class describing the play board.
+There are 40 fields on the board. The player starting fields are 10 fields apart
+Counting starts on a player starting field
+"""
 
 class Board:
 

@@ -9,6 +9,23 @@ class Game:
     def __init__(self, p1=None, p2=None, p3=None, p4=None):
         self.board = Board()
         self.players = [self.create_player(p) for p in (p1, p2, p3, p4) if p is not None]
+        """
+        Initialize a game with given player types.
+        Possible player types: 
+        'first': always moves first token
+        'last': always moves last token
+        'random': moves random token
+        'firstbeat': Beats other player if it can, otherwise moves first token
+        'lastbeat': Beats other player if it can, otherwise moves last token
+        :param p1: String describing player type
+        :type p1: str
+        :param p2: String describing player type
+        :type p2: str
+        :param p3: String describing player type
+        :type p3: str
+        :param p4: String describing player type
+        :type p4: str
+        """
         self.game_running = True
         self.p1, self.p2, self.p3, self.p4 = [p for p in self.players]
 
