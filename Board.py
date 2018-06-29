@@ -20,6 +20,26 @@ class Board:
                 t = Token('h', p.id)
                 self.tokens[p.id].append(t)
 
+    def get_start_position(self, player_id):
+        """
+        Return start position for the given player id. The start position is
+        the first field in front of a players home.
+        :type player_id: int
+        :return: start position of player
+        :rtype: int
+        """
+        return self.start_fields[player_id]
+
+    def get_start_content(self, player_id):
+        """
+        Get content (either token or empty) for the start position.
+        :param player_id: id of player
+        :type player_id: int
+        :return: Token on start position or None if players start position is empty
+        :rtype: Token or None
+        """
+        return self.board[self.get_start_position(player_id)]
+
 class InvalidMoveException(Exception):
     """
     Raised when the attempted move is invalid and wont be performed.
