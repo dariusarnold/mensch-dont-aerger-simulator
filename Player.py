@@ -8,8 +8,9 @@ class Player:
         self.id = id
         self.has_won = False
 
-    def turn(self):
+    def turn(self, board, dice_roll):
         raise NotImplementedError
+
 
 class FirstPlayer(Player):
     """
@@ -19,8 +20,7 @@ class FirstPlayer(Player):
     def __init__(self, id):
         super().__init__(id)
 
-    def turn(self, dice_roll):
-        pass
+    def turn(self, board, dice_roll):
         #self.figures_get_furthest().move(dice_roll)
 
 
@@ -32,7 +32,7 @@ class LastPlayer(Player):
     def __init__(self, id):
         super().__init__(id)
 
-    def turn(self, dice_roll):
+    def turn(self, board, dice_roll):
         pass
 
 
@@ -44,5 +44,5 @@ class RandomPlayer(Player):
     def __init__(self, id):
         super().__init__(id)
 
-    def turn(self, dice_roll):
+    def turn(self, board, dice_roll):
         pass

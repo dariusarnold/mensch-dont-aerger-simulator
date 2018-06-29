@@ -58,7 +58,7 @@ class Game:
         """play one turn for all players"""
         for player in self.players:
             dice_roll = randint(1, 6)
-            player.turn(dice_roll)
+            player.turn(self.board, dice_roll)
             if player.has_won:
                 self.game_running = False
                 return player
