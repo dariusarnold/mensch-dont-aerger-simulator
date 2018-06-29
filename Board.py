@@ -8,7 +8,7 @@ class Board:
 
     def __init__(self, player_list):
         self.players = player_list
-        self.board = list()
+        self.board = [None] * 40
         self.num_players = len(player_list)
         self.start_fields = [0, 10, 20, 30]     # fields in front of the players home
         self.target_fields = [39, 9, 19, 29]    # fields in front of the players target
