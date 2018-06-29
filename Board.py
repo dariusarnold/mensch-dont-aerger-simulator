@@ -40,6 +40,21 @@ class Board:
         """
         return self.board[self.get_start_position(player_id)]
 
+    def throw(self, token):
+        if self.board[token.pos] != token:
+            raise InvalidMoveException("Trying to throw token that is not on the board")
+        self.board[token.pos] = None
+        token.pos = 'h'
+    def _move(self, token, new_pos):
+        """
+        Change token pos attribute and update board
+        """
+        old_pos = token.pos
+        token.pos = new_pos
+        self.board[new_pos] = token
+        if old_pos != 'h': self.board[old_pos] = None
+
+
 class InvalidMoveException(Exception):
     """
     Raised when the attempted move is invalid and wont be performed.
