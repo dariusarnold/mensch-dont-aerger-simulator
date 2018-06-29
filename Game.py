@@ -7,8 +7,6 @@ from Board import Board
 class Game:
 
     def __init__(self, p1=None, p2=None, p3=None, p4=None):
-        self.board = Board()
-        self.players = [self.create_player(p) for p in (p1, p2, p3, p4) if p is not None]
         """
         Initialize a game with given player types.
         Possible player types: 
@@ -26,15 +24,16 @@ class Game:
         :param p4: String describing player type
         :type p4: str
         """
+        self.players = [self.create_player(p, i) for i, p in enumerate((p1, p2, p3, p4)) if p is not None]
         self.game_running = True
         self.p1, self.p2, self.p3, self.p4 = [p for p in self.players]
 
 
         mprint("Starting game with {} players.".format(len(self.players)))
-        for i, player in enumerate(self.players):
-            mprint("Player {index} is a {type}".format(index=i, type=type(player).__name__))
+        for player in self.players:
+            mprint("Player {index} is a {type}".format(index=player.id, type=type(player).__name__))
 
-    def create_player(self, player_type):
+    def create_player(self, player_type, player_id):
         """
         Create  a new player of type
         :param player_type: Which type of player to create: first, last random
@@ -42,11 +41,11 @@ class Game:
         :return: created player
         """
         if player_type == 'first':
-            p = Player.FirstPlayer()
+            p = Player.FirstPlayer(player_id)
         elif player_type == 'last':
-            p = Player.LastPlayer()
+            p = Player.LastPlayer(player_id)
         elif player_type == 'random':
-            p = Player.RandomPlayer()
+            p = Player.RandomPlayer(player_id)
         else:
             raise TypeError("Player type {} not known".format(player_type))
         return p
