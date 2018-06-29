@@ -12,15 +12,14 @@ class Board:
         self.num_players = len(player_list)
         self.start_fields = [0, 10, 20, 30]     # fields in front of the players home
         self.target_fields = [39, 9, 19, 29]    # fields in front of the players target
-        self.homes = [list()] * self.num_players
-        self.targets = [list()] * self.num_players
-        self.tokens = [list()] * self.num_players
+        self.tokens = [list() for _ in range(self.num_players)]
 
-        # initialize homes with player tokens
+        # initialize homes with 4 player tokens each
         for p in self.players:
-            t = p.Token('h', p.id)
-            self.homes[p.id] = [t]*4           # place 4 tokens into player home at start
-            self.tokens[p.id] = t
+            for i in range(4):
+                t = Token('h', p.id)
+                self.tokens[p.id].append(t)
+
 class InvalidMoveException(Exception):
     """
     Raised when the attempted move is invalid and wont be performed.
