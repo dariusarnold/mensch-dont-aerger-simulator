@@ -37,6 +37,13 @@ class Token:
         :param id: Player id of token, integer from 0...4
         :type id: int
         """
-        self.pos = position
+        self._pos = position
         self.id = id
-        
+
+    @property
+    def pos(self):
+        return self._pos
+
+    @pos.setter
+    def pos(self, new):
+        self._pos = new
