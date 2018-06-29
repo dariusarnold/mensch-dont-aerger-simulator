@@ -63,4 +63,8 @@ class Game:
                 self.game_running = False
                 return player
 
+        # print out board
+        print(self.board.board)
+        input()
+
 
