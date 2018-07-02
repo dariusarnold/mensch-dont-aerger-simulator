@@ -160,3 +160,8 @@ class TestMoving(unittest.TestCase):
             with self.subTest(i=i):
                 # move all possible dice rolls from 1...6
                 move_unobstructed(i)
+
+
+class TestThrowing(unittest.TestCase):
+    """Tests throwing of tokens"""
+    pass
