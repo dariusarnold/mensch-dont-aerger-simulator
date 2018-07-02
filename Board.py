@@ -118,10 +118,9 @@ class Board:
             # token is on normal board
             new_pos = (token.pos + places) % 39
             target_content = self.get_field_content(new_pos)
-            if target_content is not None:
+            if target_content is not None and target_content.id != token.id:
                 # kick other players token
-                # Todo: kick function or add it to _move
-                target_content.pos = 'h'
+                self.throw(target_content)
                 self._move(token, new_pos)
             else:
                 # target field is free, move there
