@@ -60,6 +60,7 @@ class Game:
 
         for player in self.players:
             dice_roll = randint(1, 6)
+            print("Player {} has rolled a {}".format(player.id, dice_roll))
             player.turn(self.board, dice_roll)
             if player.has_won:
                 self.game_running = False
