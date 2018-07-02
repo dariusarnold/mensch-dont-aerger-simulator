@@ -117,6 +117,16 @@ class TestMovingFromHome(unittest.TestCase):
                 self.assertEqual(blocking_token, self.b.get_start_content(p.id))
 
 
+    def test_move_from_home_empty_home(self):
+        """Check to see if trying to move a token out of an empty home 
+        raises the correct exception"""
+        for p in self.players:
+            with self.subTest(p=p):
+                for i, t in enumerate(self.b.tokens[p.id]):
+                    # place all tokens on arbitrary position outside of home
+                    self.b._move(t, i)
+                with self.assertRaises(InvalidMoveException):
+                    self.b.move_out_of_home(p.id)
 
     def test_move_unobstructed(self):
         """Test moving a token from the start postion to an unabstructed position"""
