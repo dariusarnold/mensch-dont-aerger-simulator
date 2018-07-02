@@ -70,7 +70,7 @@ class Board:
     def get_player_tokens_on_board(self, player_id):
         """Return a list of all tokens that are currently on the board, meaning
         no home tokens are included."""
-        return [t for t in self.tokens if t.pos != 'h']
+        return [t for t in self.tokens[player_id] if t.pos != 'h']
 
     def home_token_number(self, player_id):
         """get number of tokes that are in the players home"""
