@@ -53,9 +53,11 @@ class Game:
     def play(self):
         while self.game_running:
             self.turn()
+            input()
 
     def turn(self):
         """play one turn for all players"""
+
         for player in self.players:
             dice_roll = randint(1, 6)
             player.turn(self.board, dice_roll)
