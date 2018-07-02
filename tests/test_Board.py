@@ -28,6 +28,7 @@ class TestHome(unittest.TestCase):
                 self.assertEqual(len(self.b.get_home_tokens(p.id)), 4)
                 self.b.get_field_content(self.b.get_start_position(p.id))
 
+
 class TestStartPosition(unittest.TestCase):
 
     def setUp(self):
@@ -99,6 +100,23 @@ class TestMovingFromHome(unittest.TestCase):
                 self.assertGreater(prev_home_num, new_home_num)
                 self.assertIn(moved_token, prev_home_tokens)
                 self.assertEqual(blocking_token.pos, 'h')
+
+    def test_move_from_home_obstructed_by_own(self):
+        """Test if an InvalidMoveException is raised when trying to move from 
+        home to a start field blocked by a players own token"""
+        for p in self.players:
+            with self.subTest(p=p):
+                blocking_token = Token(-1, p.id)  # create ow blocking token
+                self.b._move(blocking_token, self.b.get_start_position(p.id))
+                prev_home_tokens = self.b.get_home_tokens(p.id)
+                prev_home_num = self.b.home_token_number(p.id)
+                with self.assertRaises(InvalidMoveException):
+                    self.b.move_out_of_home(p.id)
+                new_home_num = self.b.home_token_number(p.id)
+                self.assertEqual(prev_home_num, new_home_num)
+                self.assertEqual(blocking_token, self.b.get_start_content(p.id))
+
+
 
     def test_move_unobstructed(self):
         """Test moving a token from the start postion to an unabstructed position"""
