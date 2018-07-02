@@ -128,6 +128,17 @@ class TestMovingFromHome(unittest.TestCase):
                 with self.assertRaises(InvalidMoveException):
                     self.b.move_out_of_home(p.id)
 
+
+class TestMoving(unittest.TestCase):
+    """Tests related to movement on the board, without throwing"""
+
+    def setUp(self):
+        # Create a board with 4 random type players, this is only for testing the board functionality
+        self.players = ("random",) * 4
+        self.players = [RandomPlayer(i) for i, p in enumerate(self.players) if p is not None]
+        self.p1, self.p2, self.p3, self.p4 = self.players
+        self.b = Board(self.players)
+
     def test_move_unobstructed(self):
         """Test moving a token from the start postion to an unabstructed position"""
 
