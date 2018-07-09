@@ -91,6 +91,7 @@ class Board:
         if token.pos == self.home_pos or self.board[token.pos] != token:
             raise InvalidMoveException("Trying to throw token that is not on the board")
         self.board[token.pos] = None
+        print("Token of player {} on position {} was thrown".format(token.id, token.pos))
         token.pos = self.home_pos
 
     def move_token(self, token, places=None):

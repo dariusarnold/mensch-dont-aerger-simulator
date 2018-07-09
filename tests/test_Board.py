@@ -99,7 +99,7 @@ class TestMovingFromHome(unittest.TestCase):
                 moved_token = self.b.get_start_content(p.id)
                 self.assertGreater(prev_home_num, new_home_num)
                 self.assertIn(moved_token, prev_home_tokens)
-                self.assertEqual(blocking_token.pos, 'h')
+                self.assertEqual(blocking_token.pos, self.b.home_pos)
 
     def test_move_from_home_obstructed_by_own(self):
         """Test if an InvalidMoveException is raised when trying to move from 
