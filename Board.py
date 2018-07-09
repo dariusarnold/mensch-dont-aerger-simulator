@@ -1,14 +1,15 @@
 """
 Class describing the play board.
 There are 40 fields on the board. The player starting fields are 10 fields apart
-Counting starts on a player starting field
+Counting starts on a player starting field with index 0.
+Tokens in target have a pos attribute of -1...-4.
 """
 
 class Board:
 
     def __init__(self, player_list):
         self.players = player_list
-        self.board = [None] * 40
+        self.board = [None] * 56
         self.num_players = len(player_list)
         self.start_fields = [0, 10, 20, 30]     # fields in front of the players home
         self.target_fields = [39, 9, 19, 29]    # fields in front of the players target
@@ -137,6 +138,12 @@ class Board:
         elif token.pos >= 0:
             # token is on normal board
             new_pos = (token.pos + places) % 40
+            if token.pos <= self.get_target_position(id) and token.pos+places> self.get_target_position(id):
+                # this move would move the token past the home, instead try to move it in the home
+                rest_places = self.get_target_position(id) - token.pos - places # places the token would move in the target
+                rest_places *= id + 1  # the last 16 fields of the board are the target fields
+                self._move(token, rest_places)
+                return
             target_content = self.get_field_content(new_pos)
             if target_content is not None and target_content.id != token.id:
                 # kick other players token
