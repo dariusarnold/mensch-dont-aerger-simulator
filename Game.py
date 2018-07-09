@@ -67,11 +67,10 @@ class Game:
                 return player
 
         # print out board
-        for field in self.board.board:
-            if field is None:
-                print(". ", end='')
-            if field is not None:
-                print(str(field.id)+" ", end='')
+        self.print_board_simple()
+
+    def print_board_simple(self):
+        print(self.board)
         input()
 
 

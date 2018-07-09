@@ -21,6 +21,20 @@ class Board:
                 t = Token(self.home_pos, p.id)
                 self.tokens[p.id].append(t)
 
+    def __str__(self):
+        """
+        Return current board configuration as a line. The left most symbol is at
+        position 0, the right most symbol is at position 39.
+        Dots represent an empty field.
+        A number represents a token on that position. The number is the id of 
+        player to which the token belongs.
+        :return: The current board configuration
+        :rtype: str
+        """
+        s = ["".join(str(field.id)) if field is not None else "." for field in self.board]
+        s = " ".join(s)  # add one space between two symbols
+        return s
+
     @property
     def home_pos(self):
         """Get pos used to indicate that a token is in the players home"""
