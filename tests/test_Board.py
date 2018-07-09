@@ -223,3 +223,29 @@ class TestMovingBorder(unittest.TestCase):
                 self.b._move(token, 39)
                 self.b.move_token(token, 1)
                 self.assertEqual(token.pos, 0)
+
+
+class TestMovingIntoTarget(unittest.TestCase):
+    """Tests if moving a token around the border at field 40 works.
+    """
+
+    def setUp(self):
+        # Create a board with 4 random type players, this is only for testing the board functionality
+        self.players = ("random",) * 4
+        self.players = [RandomPlayer(i) for i, p in enumerate(self.players) if
+                        p is not None]
+        self.p1, self.p2, self.p3, self.p4 = self.players
+        self.b = Board(self.players)
+
+    def test_moving_into_target_correct(self):
+        """Test if a player is automatically moved to the correct position in 
+        the target if he moves enough places """
+        for places in range(1, 5):
+            with self.subTest(places=places):
+                for p in self.players:
+                    with self.subTest(p=p):
+                        token = self.b.get_home_tokens(p.id)[0]
+                        self.b._move(token, self.b.get_target_position(p.id))
+                        self.b.move_token(token, places)
+                        self.assertEqual(token.pos, -places*(p.id+1))
+
