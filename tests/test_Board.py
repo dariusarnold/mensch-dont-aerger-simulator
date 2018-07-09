@@ -213,9 +213,12 @@ class TestMovingBorder(unittest.TestCase):
 
     def test_move_over_border(self):
         """Test if a token is moved correctly over the boarder. The board ends
-        at the field with index 39."""
+        at the field with index 39.
+        But player 0 can't move over the border since his target field is there,
+        so he is skipped here"""
         for p in self.players:
             with self.subTest(p=p):
+                if p.id == 0: return
                 token = self.b.get_home_tokens(p.id)[0]
                 self.b._move(token, 38)
                 self.b.move_token(token, 5)
