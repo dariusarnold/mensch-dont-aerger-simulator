@@ -13,12 +13,18 @@ class Board:
         self.start_fields = [0, 10, 20, 30]     # fields in front of the players home
         self.target_fields = [39, 9, 19, 29]    # fields in front of the players target
         self.tokens = [list() for _ in range(self.num_players)]
+        self._home_pos = 'h'
 
         # initialize homes with 4 player tokens each
         for p in self.players:
             for i in range(4):
-                t = Token('h', p.id)
+                t = Token(self.home_pos, p.id)
                 self.tokens[p.id].append(t)
+
+    @property
+    def home_pos(self):
+        """Get pos used to indicate that a token is in the players home"""
+        return self._home_pos
 
     def move_out_of_home(self, player_id):
         """
@@ -61,7 +67,7 @@ class Board:
     def get_home_tokens(self, player_id):
         """return list of tokens that are in a players home. List is empty if
         there are no tokens in the players home"""
-        return [t for t in self.tokens[player_id] if t.pos == 'h']
+        return [t for t in self.tokens[player_id] if t.pos == self.home_pos]
 
     def player_tokens(self, player_id):
         """return a list of all tokens of a player"""
@@ -70,7 +76,7 @@ class Board:
     def get_player_tokens_on_board(self, player_id):
         """Return a list of all tokens that are currently on the board, meaning
         no home tokens are included."""
-        return [t for t in self.tokens[player_id] if t.pos != 'h']
+        return [t for t in self.tokens[player_id] if t.pos != self.home_pos]
 
     def home_token_number(self, player_id):
         """get number of tokes that are in the players home"""
@@ -85,7 +91,7 @@ class Board:
         if self.board[token.pos] != token:
             raise InvalidMoveException("Trying to throw token that is not on the board")
         self.board[token.pos] = None
-        token.pos = 'h'
+        token.pos = self.home_pos
 
     def move_token(self, token, places=None):
         """
@@ -98,7 +104,7 @@ class Board:
         :rtype: None
         """
         id = token.id # token id is equal to id of the player to which the token belongs
-        if token.pos == 'h':
+        if token.pos == self.home_pos:
             # is the players start field free?
             start_content = self.get_start_content(id)
             if start_content is None:
@@ -109,7 +115,7 @@ class Board:
                 raise InvalidMoveException("Start field blocked by own token")
             else:
                 # other players token blocks start, throw him
-                start_content.pos = 'h'
+                start_content.pos = self.home_pos
                 self._move(token, self.start_fields[token.id])
         elif token.pos < 0:
             # token is in target
@@ -132,7 +138,7 @@ class Board:
         old_pos = token.pos
         token.pos = new_pos
         self.board[new_pos] = token
-        if old_pos != 'h': self.board[old_pos] = None
+        if old_pos != self.home_pos: self.board[old_pos] = None
 
 
 class InvalidMoveException(Exception):
