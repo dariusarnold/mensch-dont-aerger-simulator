@@ -164,4 +164,37 @@ class TestMoving(unittest.TestCase):
 
 class TestThrowing(unittest.TestCase):
     """Tests throwing of tokens"""
-    pass
+
+    def setUp(self):
+        # Create a board with 4 random type players, this is only for testing the board functionality
+        self.players = ("random",) * 4
+        self.players = [RandomPlayer(i) for i, p in enumerate(self.players) if p is not None]
+        self.p1, self.p2, self.p3, self.p4 = self.players
+        self.b = Board(self.players)
+
+    def test_throw_token_in_home_exception(self):
+        """Tests if trying to throw a token in the home field raises the
+        InvalidMoveException"""
+        for p in self.players:
+            with self.subTest(p=p):
+                home_token = self.b.get_home_tokens(p.id)[0]
+                with self.assertRaises(InvalidMoveException):
+                    self.b.throw(home_token)
+
+    def test_throw_token_on_board(self):
+        """Tests if throwing a token on board works"""
+        for p in self.players:
+            with self.subTest(p=p):
+                prev_home_tokens = self.b.get_home_tokens(p.id)
+                self.b.move_out_of_home(p.id)
+                moved_token = self.b.get_start_content(p.id)
+                self.b.throw(moved_token)
+                new_home_tokens = self.b.get_home_tokens(p.id)
+                self.assertIn(moved_token, new_home_tokens)
+                self.assertEqual(moved_token.pos, self.b.home_pos)
+
+    def test_throw_from_target_exception(self):
+        """Test if throwing a token that is in a players target raises the
+        InvalidMoveException"""
+        pass
+
