@@ -23,7 +23,7 @@ class FirstPlayer(Player):
         super().__init__(id)
 
     def turn(self, board, dice_roll):
-        #self.figures_get_furthest().move(dice_roll)
+        pass
 
 
 class LastPlayer(Player):
