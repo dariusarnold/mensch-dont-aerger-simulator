@@ -84,14 +84,13 @@ class Board:
 
     def get_field_content(self, position):
         """get content of the board at position"""
-        if position >= 0 and position <= 39:
+        if 0 <= position <= 39:
             return self.board[position]
 
     def throw(self, token):
         if token.pos == self.home_pos or self.board[token.pos] != token:
             raise InvalidMoveException("Trying to throw token that is not on the board")
         self.board[token.pos] = None
-        print("Token of player {} on position {} was thrown".format(token.id, token.pos))
         token.pos = self.home_pos
 
     def move_token(self, token, places=None):
@@ -128,10 +127,8 @@ class Board:
             if target_content is not None and target_content.id != token.id:
                 # kick other players token
                 self.throw(target_content)
-                self._move(token, new_pos)
-            else:
-                # target field is free, move there
-                self._move(token, new_pos)
+            self._move(token, new_pos)
+
     def _move(self, token, new_pos):
         """
         Change token pos attribute and update board
