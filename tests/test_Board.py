@@ -198,3 +198,28 @@ class TestThrowing(unittest.TestCase):
         InvalidMoveException"""
         pass
 
+
+class TestMovingBorder(unittest.TestCase):
+    """Tests if moving a token around the border at field 40 works.
+    """
+
+    def setUp(self):
+        # Create a board with 4 random type players, this is only for testing the board functionality
+        self.players = ("random",) * 4
+        self.players = [RandomPlayer(i) for i, p in enumerate(self.players) if
+                        p is not None]
+        self.p1, self.p2, self.p3, self.p4 = self.players
+        self.b = Board(self.players)
+
+    def test_move_over_border(self):
+        """Test if a token is moved correctly over the boarder. The board ends
+        at the field with index 39."""
+        for p in self.players:
+            with self.subTest(p=p):
+                token = self.b.get_home_tokens(p.id)[0]
+                self.b._move(token, 38)
+                self.b.move_token(token, 5)
+                self.assertEqual(token.pos, 3)
+                self.b._move(token, 39)
+                self.b.move_token(token, 1)
+                self.assertEqual(token.pos, 0)
