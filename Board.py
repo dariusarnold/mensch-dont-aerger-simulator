@@ -123,7 +123,7 @@ class Board:
             raise NotImplementedError
         elif token.pos >= 0:
             # token is on normal board
-            new_pos = (token.pos + places) % 39
+            new_pos = (token.pos + places) % 40
             target_content = self.get_field_content(new_pos)
             if target_content is not None and target_content.id != token.id:
                 # kick other players token
