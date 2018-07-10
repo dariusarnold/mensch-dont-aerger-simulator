@@ -252,3 +252,14 @@ class TestMovingIntoTarget(unittest.TestCase):
                         self.b.move_token(token, places)
                         self.assertEqual(token.pos, -places*(p.id+1))
 
+    def test_moving_into_target_fails(self):
+        """Test if the correct exception is raised when the player is in front
+         of the target but his dice roll would overshoot the last position in 
+         the target"""
+        for p in self.players:
+            with self.subTest(p=p):
+                token = self.b.get_home_tokens(p.id)[0]
+                self.b._move(token, self.b.get_target_position(p.id))
+                with self.assertRaises(InvalidMoveException):
+                    self.b.move_token(token, 5)  # 5 will always overshoot home of length 4
+                self.assertEqual(token.pos, self.b.get_target_position(p.id))
