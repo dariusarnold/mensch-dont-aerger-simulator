@@ -41,14 +41,14 @@ class Game:
         :return: created player
         """
         if player_type == 'first':
-            p = Player.FirstPlayer(player_id)
+            player = Player.FirstPlayer(player_id)
         elif player_type == 'last':
-            p = Player.LastPlayer(player_id)
+            player = Player.LastPlayer(player_id)
         elif player_type == 'random':
-            p = Player.RandomPlayer(player_id)
+            player = Player.RandomPlayer(player_id)
         else:
             raise TypeError("Player type {} not known".format(player_type))
-        return p
+        return player
 
     def play(self):
         while self.game_running:

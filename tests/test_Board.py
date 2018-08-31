@@ -10,23 +10,23 @@ class TestHome(unittest.TestCase):
         self.players = ("random",) * 4
         self.players = [RandomPlayer(i) for i, p in enumerate(self.players) if p is not None]
         self.p1, self.p2, self.p3, self.p4 = self.players
-        self.b = Board(self.players)
+        self.board = Board(self.players)
 
     def test_home_tokens(self):
         """Test if all homes are filled with 4 tokens after creation."""
         for p in self.players:
             with self.subTest(p=p):
-                home_t_num = self.b.home_token_number(p.id)
+                home_t_num = self.board.home_token_number(p.id)
                 self.assertEqual(home_t_num, 4)
 
     def test_throw(self):
         """Test if a thrown token is placed into the corresponding home"""
         for p in self.players:
             with self.subTest(p=p):
-                self.b.move_out_of_home(p.id)
-                self.b.throw(self.b.get_start_content(p.id))
-                self.assertEqual(len(self.b.get_home_tokens(p.id)), 4)
-                self.b.get_field_content(self.b.get_start_position(p.id))
+                self.board.move_out_of_home(p.id)
+                self.board.throw(self.board.get_start_content(p.id))
+                self.assertEqual(len(self.board.get_home_tokens(p.id)), 4)
+                self.board.get_field_content(self.board.get_start_position(p.id))
 
 
 class TestStartPosition(unittest.TestCase):
@@ -36,31 +36,31 @@ class TestStartPosition(unittest.TestCase):
         self.players = ("random",) * 4
         self.players = [RandomPlayer(i) for i, p in enumerate(self.players) if p is not None]
         self.p1, self.p2, self.p3, self.p4 = self.players
-        self.b = Board(self.players)
+        self.board = Board(self.players)
 
     def test_start_positions(self):
         """Test if the correct start positions are returned"""
         expected = (0, 10, 20, 30)
         for e, p in zip(expected, self.players):
             with self.subTest(e=e, p=p):
-                s = self.b.get_start_position(p.id)
+                s = self.board.get_start_position(p.id)
                 self.assertEqual(s, e)
 
     def test_start_postion_content_empty(self):
         """Test if the start postion content is correctly returned as empty after creation"""
         for p in self.players:
             with self.subTest(p=p):
-                s = self.b.get_start_content(p.id)
+                s = self.board.get_start_content(p.id)
                 self.assertEqual(s, None)
 
     def test_start_postion_content_full(self):
         """Test if the start postion content is correctly returned as an own token if there is one"""
         for p in self.players:
             with self.subTest(p=p):
-                start_pos = self.b.get_start_position(p.id)
+                start_pos = self.board.get_start_position(p.id)
                 t = Token(start_pos, p.id)
-                self.b.board[start_pos] = t
-                s = self.b.get_start_content(p.id)
+                self.board.board[start_pos] = t
+                s = self.board.get_start_content(p.id)
                 self.assertEqual(t, s)
 
 
@@ -71,19 +71,19 @@ class TestMovingFromHome(unittest.TestCase):
         self.players = ("random",) * 4
         self.players = [RandomPlayer(i) for i, p in enumerate(self.players) if p is not None]
         self.p1, self.p2, self.p3, self.p4 = self.players
-        self.b = Board(self.players)
+        self.board = Board(self.players)
 
     def test_move_from_home_unobstructed(self):
         """Test if the token can be moved from home to the start position if it is unobstructed"""
         for p in self.players:
             with self.subTest(p=p):
-                prev_home_tokens = self.b.get_home_tokens(p.id)
-                prev_home_num = self.b.home_token_number(p.id)
-                self.b.move_out_of_home(p.id)
-                new_home_num = self.b.home_token_number(p.id)
+                prev_home_tokens = self.board.get_home_tokens(p.id)
+                prev_home_num = self.board.home_token_number(p.id)
+                self.board.move_out_of_home(p.id)
+                new_home_num = self.board.home_token_number(p.id)
                 self.assertGreater(prev_home_num, new_home_num)
                 self.assertEqual(prev_home_num-1, new_home_num)
-                moved_token = self.b.get_start_content(p.id)
+                moved_token = self.board.get_start_content(p.id)
                 self.assertIn(moved_token, prev_home_tokens)
 
     def test_move_from_home_obstructed_by_other(self):
@@ -91,15 +91,15 @@ class TestMovingFromHome(unittest.TestCase):
         for p in self.players:
             with self.subTest(p=p):
                 blocking_token = Token(-1, -1)  # create blocking token
-                self.b._move(blocking_token, self.b.get_start_position(p.id))  # move blocking token to current players start field
-                prev_home_tokens = self.b.get_home_tokens(p.id)
-                prev_home_num = self.b.home_token_number(p.id)
-                self.b.move_out_of_home(p.id)
-                new_home_num = self.b.home_token_number(p.id)
-                moved_token = self.b.get_start_content(p.id)
+                self.board._move(blocking_token, self.board.get_start_position(p.id))  # move blocking token to current players start field
+                prev_home_tokens = self.board.get_home_tokens(p.id)
+                prev_home_num = self.board.home_token_number(p.id)
+                self.board.move_out_of_home(p.id)
+                new_home_num = self.board.home_token_number(p.id)
+                moved_token = self.board.get_start_content(p.id)
                 self.assertGreater(prev_home_num, new_home_num)
                 self.assertIn(moved_token, prev_home_tokens)
-                self.assertEqual(blocking_token.pos, self.b.home_pos)
+                self.assertEqual(blocking_token.position, self.board.home_pos)
 
     def test_move_from_home_obstructed_by_own(self):
         """Test if an InvalidMoveException is raised when trying to move from 
@@ -107,14 +107,14 @@ class TestMovingFromHome(unittest.TestCase):
         for p in self.players:
             with self.subTest(p=p):
                 blocking_token = Token(-1, p.id)  # create ow blocking token
-                self.b._move(blocking_token, self.b.get_start_position(p.id))
-                prev_home_tokens = self.b.get_home_tokens(p.id)
-                prev_home_num = self.b.home_token_number(p.id)
+                self.board._move(blocking_token, self.board.get_start_position(p.id))
+                prev_home_tokens = self.board.get_home_tokens(p.id)
+                prev_home_num = self.board.home_token_number(p.id)
                 with self.assertRaises(InvalidMoveException):
-                    self.b.move_out_of_home(p.id)
-                new_home_num = self.b.home_token_number(p.id)
+                    self.board.move_out_of_home(p.id)
+                new_home_num = self.board.home_token_number(p.id)
                 self.assertEqual(prev_home_num, new_home_num)
-                self.assertEqual(blocking_token, self.b.get_start_content(p.id))
+                self.assertEqual(blocking_token, self.board.get_start_content(p.id))
 
 
     def test_move_from_home_empty_home(self):
@@ -122,11 +122,11 @@ class TestMovingFromHome(unittest.TestCase):
         raises the correct exception"""
         for p in self.players:
             with self.subTest(p=p):
-                for i, t in enumerate(self.b.tokens[p.id]):
+                for i, t in enumerate(self.board.tokens[p.id]):
                     # place all tokens on arbitrary position outside of home
-                    self.b._move(t, i)
+                    self.board._move(t, i)
                 with self.assertRaises(InvalidMoveException):
-                    self.b.move_out_of_home(p.id)
+                    self.board.move_out_of_home(p.id)
 
 
 class TestMoving(unittest.TestCase):
@@ -137,7 +137,7 @@ class TestMoving(unittest.TestCase):
         self.players = ("random",) * 4
         self.players = [RandomPlayer(i) for i, p in enumerate(self.players) if p is not None]
         self.p1, self.p2, self.p3, self.p4 = self.players
-        self.b = Board(self.players)
+        self.board = Board(self.players)
 
     def test_move_unobstructed(self):
         """Test moving a token from the start postion to an unabstructed position"""
@@ -146,15 +146,15 @@ class TestMoving(unittest.TestCase):
             """Test if a player can move his token for places on the board"""
             for p in self.players:
                 with self.subTest(p=p):
-                    self.b.move_out_of_home(p.id) # move one token from home so there is a movable token on the board
-                    t = self.b.get_start_content(p.id)
-                    prev_pos = t.pos
-                    self.b.move_token(t, places)
-                    new_pos = t.pos
+                    self.board.move_out_of_home(p.id) # move one token from home so there is a movable token on the board
+                    t = self.board.get_start_content(p.id)
+                    prev_pos = t.position
+                    self.board.move_token(t, places)
+                    new_pos = t.position
                     self.assertEqual(prev_pos+places, new_pos)  # test if new position and old position fit
-                    self.assertEqual(self.b.get_field_content(new_pos), t)  # test if moved token and token on new position are equal
-                    self.assertEqual(self.b.get_field_content(prev_pos), None)  # test if old position is filled with None
-                    self.b.throw(t) # undo the move so start field is not blocked
+                    self.assertEqual(self.board.get_field_content(new_pos), t)  # test if moved token and token on new position are equal
+                    self.assertEqual(self.board.get_field_content(prev_pos), None)  # test if old position is filled with None
+                    self.board.throw(t) # undo the move so start field is not blocked
 
         for i in range(1, 7):
             with self.subTest(i=i):
@@ -170,28 +170,28 @@ class TestThrowing(unittest.TestCase):
         self.players = ("random",) * 4
         self.players = [RandomPlayer(i) for i, p in enumerate(self.players) if p is not None]
         self.p1, self.p2, self.p3, self.p4 = self.players
-        self.b = Board(self.players)
+        self.board = Board(self.players)
 
     def test_throw_token_in_home_exception(self):
         """Tests if trying to throw a token in the home field raises the
         InvalidMoveException"""
         for p in self.players:
             with self.subTest(p=p):
-                home_token = self.b.get_home_tokens(p.id)[0]
+                home_token = self.board.get_home_tokens(p.id)[0]
                 with self.assertRaises(InvalidMoveException):
-                    self.b.throw(home_token)
+                    self.board.throw(home_token)
 
     def test_throw_token_on_board(self):
         """Tests if throwing a token on board works"""
         for p in self.players:
             with self.subTest(p=p):
-                prev_home_tokens = self.b.get_home_tokens(p.id)
-                self.b.move_out_of_home(p.id)
-                moved_token = self.b.get_start_content(p.id)
-                self.b.throw(moved_token)
-                new_home_tokens = self.b.get_home_tokens(p.id)
+                prev_home_tokens = self.board.get_home_tokens(p.id)
+                self.board.move_out_of_home(p.id)
+                moved_token = self.board.get_start_content(p.id)
+                self.board.throw(moved_token)
+                new_home_tokens = self.board.get_home_tokens(p.id)
                 self.assertIn(moved_token, new_home_tokens)
-                self.assertEqual(moved_token.pos, self.b.home_pos)
+                self.assertEqual(moved_token.position, self.board.home_pos)
 
     def test_throw_from_target_exception(self):
         """Test if throwing a token that is in a players target raises the
@@ -209,7 +209,7 @@ class TestMovingBorder(unittest.TestCase):
         self.players = [RandomPlayer(i) for i, p in enumerate(self.players) if
                         p is not None]
         self.p1, self.p2, self.p3, self.p4 = self.players
-        self.b = Board(self.players)
+        self.board = Board(self.players)
 
     def test_move_over_border(self):
         """Test if a token is moved correctly over the boarder. The board ends
@@ -219,13 +219,13 @@ class TestMovingBorder(unittest.TestCase):
         for p in self.players:
             with self.subTest(p=p):
                 if p.id == 0: return
-                token = self.b.get_home_tokens(p.id)[0]
-                self.b._move(token, 38)
-                self.b.move_token(token, 5)
-                self.assertEqual(token.pos, 3)
-                self.b._move(token, 39)
-                self.b.move_token(token, 1)
-                self.assertEqual(token.pos, 0)
+                token = self.board.get_home_tokens(p.id)[0]
+                self.board._move(token, 38)
+                self.board.move_token(token, 5)
+                self.assertEqual(token.position, 3)
+                self.board._move(token, 39)
+                self.board.move_token(token, 1)
+                self.assertEqual(token.position, 0)
 
 
 class TestMovingIntoTarget(unittest.TestCase):
@@ -238,7 +238,7 @@ class TestMovingIntoTarget(unittest.TestCase):
         self.players = [RandomPlayer(i) for i, p in enumerate(self.players) if
                         p is not None]
         self.p1, self.p2, self.p3, self.p4 = self.players
-        self.b = Board(self.players)
+        self.board = Board(self.players)
 
     def test_moving_into_target_correct(self):
         """Test if a player is automatically moved to the correct position in 
@@ -247,10 +247,10 @@ class TestMovingIntoTarget(unittest.TestCase):
             with self.subTest(places=places):
                 for p in self.players:
                     with self.subTest(p=p):
-                        token = self.b.get_home_tokens(p.id)[0]
-                        self.b._move(token, self.b.get_target_position(p.id))
-                        self.b.move_token(token, places)
-                        self.assertEqual(token.pos, -places*(p.id+1))
+                        token = self.board.get_home_tokens(p.id)[0]
+                        self.board._move(token, self.board.get_target_position(p.id))
+                        self.board.move_token(token, places)
+                        self.assertEqual(token.position, -places * (p.id + 1))
 
     def test_moving_into_target_fails(self):
         """Test if the correct exception is raised when the player is in front
@@ -258,8 +258,8 @@ class TestMovingIntoTarget(unittest.TestCase):
          the target"""
         for p in self.players:
             with self.subTest(p=p):
-                token = self.b.get_home_tokens(p.id)[0]
-                self.b._move(token, self.b.get_target_position(p.id))
+                token = self.board.get_home_tokens(p.id)[0]
+                self.board._move(token, self.board.get_target_position(p.id))
                 with self.assertRaises(InvalidMoveException):
-                    self.b.move_token(token, 5)  # 5 will always overshoot home of length 4
-                self.assertEqual(token.pos, self.b.get_target_position(p.id))
+                    self.board.move_token(token, 5)  # 5 will always overshoot home of length 4
+                self.assertEqual(token.position, self.board.get_target_position(p.id))
