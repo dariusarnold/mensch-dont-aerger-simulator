@@ -247,3 +247,21 @@ class TestMovingIntoTarget(unittest.TestCase):
                 with self.assertRaises(InvalidMoveException):
                     self.board.move_token(token, 5)  # 5 will always overshoot home of length 4
                 self.assertEqual(token.position, self.board.get_target_position(player.id))
+
+
+class TestPlayerWinChecking(unittest.TestCase):
+
+    def setUp(self):
+        self.players = [RandomPlayer(i) for i in range(4)]
+        self.board = Board(self.players)
+        
+    def test_win_condition_sucessfull(self):
+        for player in self.players:
+            with self.subTest(player=player):
+                self.assertEqual(player.has_won(self.board), False)
+                # move all tokens from home into the target
+                for token, places_to_move in zip(self.board.get_home_tokens(player.id), range(1, 5)):
+                    # first move in front, then into the target
+                    self.board._move(token, self.board.get_target_position(player.id))
+                    self.board.move_token(token, places_to_move)
+                self.assertEqual(player.has_won(self.board), True)

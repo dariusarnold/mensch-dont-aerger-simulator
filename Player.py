@@ -8,10 +8,20 @@ class Player:
 
     def __init__(self, id):
         self.id = id
-        self.has_won = False
 
     def turn(self, board, dice_roll):
         raise NotImplementedError
+
+    def has_won(self, board):
+        """
+        Check if all player tokens are in the target field, if yes the player has won
+        :param board: Current board state
+        :type board: Board
+        :return:
+        :rtype: bool
+        """
+        player_tokens = board.get_player_tokens(self.id)
+        return all((t.position != board.home_pos and t.position < 0 for t in player_tokens))
 
 
 class FirstPlayer(Player):
