@@ -7,9 +7,7 @@ class TestHome(unittest.TestCase):
 
     def setUp(self):
         # Create a board with 4 random type players, this is only for testing the board functionality
-        self.players = ("random",) * 4
-        self.players = [RandomPlayer(i) for i, p in enumerate(self.players) if p is not None]
-        self.p1, self.p2, self.p3, self.p4 = self.players
+        self.players = [RandomPlayer(i) for i in range(4)]
         self.board = Board(self.players)
 
     def test_home_tokens(self):
@@ -33,9 +31,7 @@ class TestStartPosition(unittest.TestCase):
 
     def setUp(self):
         # Create a board with 4 random type players, this is only for testing the board functionality
-        self.players = ("random",) * 4
-        self.players = [RandomPlayer(i) for i, p in enumerate(self.players) if p is not None]
-        self.p1, self.p2, self.p3, self.p4 = self.players
+        self.players = [RandomPlayer(i) for i in range(4)]
         self.board = Board(self.players)
 
     def test_start_positions(self):
@@ -68,9 +64,7 @@ class TestMovingFromHome(unittest.TestCase):
 
     def setUp(self):
         # Create a board with 4 random type players, this is only for testing the board functionality
-        self.players = ("random",) * 4
-        self.players = [RandomPlayer(i) for i, p in enumerate(self.players) if p is not None]
-        self.p1, self.p2, self.p3, self.p4 = self.players
+        self.players = [RandomPlayer(i) for i in range(4)]
         self.board = Board(self.players)
 
     def test_move_from_home_unobstructed(self):
@@ -134,9 +128,7 @@ class TestMoving(unittest.TestCase):
 
     def setUp(self):
         # Create a board with 4 random type players, this is only for testing the board functionality
-        self.players = ("random",) * 4
-        self.players = [RandomPlayer(i) for i, p in enumerate(self.players) if p is not None]
-        self.p1, self.p2, self.p3, self.p4 = self.players
+        self.players = [RandomPlayer(i) for i in range(4)]
         self.board = Board(self.players)
 
     def test_move_unobstructed(self):
@@ -167,9 +159,7 @@ class TestThrowing(unittest.TestCase):
 
     def setUp(self):
         # Create a board with 4 random type players, this is only for testing the board functionality
-        self.players = ("random",) * 4
-        self.players = [RandomPlayer(i) for i, p in enumerate(self.players) if p is not None]
-        self.p1, self.p2, self.p3, self.p4 = self.players
+        self.players = [RandomPlayer(i) for i in range(4)]
         self.board = Board(self.players)
 
     def test_throw_token_in_home_exception(self):
@@ -205,10 +195,7 @@ class TestMovingBorder(unittest.TestCase):
 
     def setUp(self):
         # Create a board with 4 random type players, this is only for testing the board functionality
-        self.players = ("random",) * 4
-        self.players = [RandomPlayer(i) for i, p in enumerate(self.players) if
-                        p is not None]
-        self.p1, self.p2, self.p3, self.p4 = self.players
+        self.players = [RandomPlayer(i) for i in range(4)]
         self.board = Board(self.players)
 
     def test_move_over_border(self):
@@ -234,10 +221,7 @@ class TestMovingIntoTarget(unittest.TestCase):
 
     def setUp(self):
         # Create a board with 4 random type players, this is only for testing the board functionality
-        self.players = ("random",) * 4
-        self.players = [RandomPlayer(i) for i, p in enumerate(self.players) if
-                        p is not None]
-        self.p1, self.p2, self.p3, self.p4 = self.players
+        self.players = [RandomPlayer(i) for i in range(4)]
         self.board = Board(self.players)
 
     def test_moving_into_target_correct(self):
