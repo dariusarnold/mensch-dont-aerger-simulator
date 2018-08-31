@@ -84,7 +84,7 @@ class Board:
         there are no tokens in the players home"""
         return [t for t in self.tokens[player_id] if t.position == self.home_pos]
 
-    def player_tokens(self, player_id):
+    def get_player_tokens(self, player_id):
         """return a list of all tokens of a player"""
         return self.tokens[player_id]
 
@@ -138,9 +138,12 @@ class Board:
         elif token.position >= 0:
             # token is on normal board
             new_pos = (token.position + places) % 40
-            if token.position <= self.get_target_position(id) and token.position+places> self.get_target_position(id):
+            if token.position <= self.get_target_position(id) < token.position+places:
                 # this move would move the token past the home, instead try to move it in the home
                 rest_places = self.get_target_position(id) - token.position - places # places the token would move in the target
+                if rest_places < -4:
+                    # This move would place token outside of the boundary of the target, which is only 4 fields long
+                    raise InvalidMoveException
                 rest_places *= id + 1  # the last 16 fields of the board are the target fields
                 self._move(token, rest_places)
                 return
